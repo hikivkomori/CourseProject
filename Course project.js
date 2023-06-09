@@ -125,3 +125,22 @@ let questions = [
 
         quizContainer.innerHTML = output.join("");
     }
+    function submitQuiz() {
+        let quizContainer = document.getElementById("quiz");
+        let answerContainers = quizContainer.querySelectorAll(".answers");
+
+        let numCorrect = 0;
+        let audio = document.getElementById("audio");
+        audio.play();
+        questions.forEach(function (currentQuestion, questionNumber) {
+            let answerContainer = answerContainers[questionNumber];
+            let selector = `input[name=question${questionNumber}]:checked`;
+            let userAnswer = (answerContainer.querySelector(selector) || {}).value;
+
+            if (userAnswer === currentQuestion.correctAnswer) {
+                numCorrect++;
+                answerContainers[questionNumber].className = "correct";
+            } else {
+                answerContainers[questionNumber].className = "incorrect";
+            }
+        });
