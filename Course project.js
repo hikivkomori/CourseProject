@@ -98,3 +98,30 @@ let questions = [
         },
         correctAnswer: "b"
     }
+
+    function generateQuiz() {
+        let quizContainer = document.getElementById("quiz");
+        let output = [];
+
+        questions.forEach(function (currentQuestion, questionNumber) {
+            let answers = [];
+
+            for (let letter in currentQuestion.answers) {
+                answers.push(
+                    `<label>
+            <input type="radio" name="question${questionNumber}" value="${letter}">
+            ${letter} : ${currentQuestion.answers[letter]}
+          </label>`
+                );
+            }
+
+            output.push(
+                `<div class="question">
+          <h3>${currentQuestion.question}</h3>
+          <div class="answers">${answers.join("")}</div>
+        </div>`
+            );
+        });
+
+        quizContainer.innerHTML = output.join("");
+    }
