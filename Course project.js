@@ -98,49 +98,58 @@ let questions = [
         },
         correctAnswer: "b"
     }
+];
+function generateQuiz() {
+    let quizContainer = document.getElementById("quiz");
+    let output = [];
 
-    function generateQuiz() {
-        let quizContainer = document.getElementById("quiz");
-        let output = [];
+    questions.forEach(function (currentQuestion, questionNumber) {
+        let answers = [];
 
-        questions.forEach(function (currentQuestion, questionNumber) {
-            let answers = [];
-
-            for (let letter in currentQuestion.answers) {
-                answers.push(
-                    `<label>
+        for (let letter in currentQuestion.answers) {
+            answers.push(
+                `<label>
             <input type="radio" name="question${questionNumber}" value="${letter}">
             ${letter} : ${currentQuestion.answers[letter]}
           </label>`
-                );
-            }
+            );
+        }
 
-            output.push(
-                `<div class="question">
+        output.push(
+            `<div class="question">
           <h3>${currentQuestion.question}</h3>
           <div class="answers">${answers.join("")}</div>
         </div>`
-            );
-        });
+        );
+    });
 
-        quizContainer.innerHTML = output.join("");
-    }
-    function submitQuiz() {
-        let quizContainer = document.getElementById("quiz");
-        let answerContainers = quizContainer.querySelectorAll(".answers");
+    quizContainer.innerHTML = output.join("");
+}
+function submitQuiz() {
+    let quizContainer = document.getElementById("quiz");
+    let answerContainers = quizContainer.querySelectorAll(".answers");
 
-        let numCorrect = 0;
-        let audio = document.getElementById("audio");
-        audio.play();
-        questions.forEach(function (currentQuestion, questionNumber) {
-            let answerContainer = answerContainers[questionNumber];
-            let selector = `input[name=question${questionNumber}]:checked`;
-            let userAnswer = (answerContainer.querySelector(selector) || {}).value;
+    let numCorrect = 0;
+    let audio = document.getElementById("audio");
+    audio.play();
+    questions.forEach(function (currentQuestion, questionNumber) {
+        let answerContainer = answerContainers[questionNumber];
+        let selector = `input[name=question${questionNumber}]:checked`;
+        let userAnswer = (answerContainer.querySelector(selector) || {}).value;
 
-            if (userAnswer === currentQuestion.correctAnswer) {
-                numCorrect++;
-                answerContainers[questionNumber].className = "correct";
-            } else {
-                answerContainers[questionNumber].className = "incorrect";
-            }
-        });
+        if (userAnswer === currentQuestion.correctAnswer) {
+            numCorrect++;
+            answerContainers[questionNumber].className = "correct";
+        } else {
+            answerContainers[questionNumber].className = "incorrect";
+        }
+    });
+
+    let resultContainer = document.createElement("div");
+    resultContainer.className = "result";
+    resultContainer.textContent = `You've answered correctly on ${numCorrect} out of ${questions.length} questions.`;
+
+    quizContainer.appendChild(resultContainer);
+}
+
+generateQuiz();
